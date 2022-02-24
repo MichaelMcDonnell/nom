@@ -193,6 +193,6 @@ jobs:
           args: --output-dir coverage --out Lcov
       
       - name: Publish to Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

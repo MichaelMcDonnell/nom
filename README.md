@@ -13,7 +13,7 @@ that end, it uses extensively Rust's *strong typing* and *memory safety* to prod
 fast and correct parsers, and provides functions, macros and traits to abstract most of the
 error prone plumbing.
 
-![nom logo in CC0 license, by Ange Albertini](https://raw.githubusercontent.com/Geal/nom/master/assets/nom.png)
+![nom logo in CC0 license, by Ange Albertini](https://raw.githubusercontent.com/Geal/nom/main/assets/nom.png)
 
 *nom will happily take a byte out of your files :)*
 
@@ -74,8 +74,8 @@ fn parse_color() {
 ## Documentation
 
 - [Reference documentation](https://docs.rs/nom)
-- [Various design documents and tutorials](https://github.com/Geal/nom/tree/master/doc)
-- [List of combinators and their behaviour](https://github.com/Geal/nom/blob/master/doc/choosing_a_combinator.md)
+- [Various design documents and tutorials](https://github.com/Geal/nom/tree/main/doc)
+- [List of combinators and their behaviour](https://github.com/Geal/nom/blob/main/doc/choosing_a_combinator.md)
 
 If you need any help developing your parsers, please ping `geal` on IRC (libera, geeknode, oftc), go to `#nom-parsers` on Libera IRC, or on the [Gitter chat room](https://gitter.im/Geal/nom).
 
@@ -113,7 +113,7 @@ formats such as JSON, nom can manage it, and provides you with useful tools:
 
 Example projects:
 
-- [HTTP proxy](https://github.com/sozu-proxy/sozu/blob/master/lib/src/protocol/http/parser.rs)
+- [HTTP proxy](https://github.com/sozu-proxy/sozu/blob/main/lib/src/protocol/http/parser/mod.rs)
 - [TOML parser](https://github.com/joelself/tomllib)
 
 ### Programming language parsers
@@ -148,7 +148,7 @@ It allows you to build powerful, deterministic state machines for your protocols
 
 Example projects:
 
-- [HTTP proxy](https://github.com/sozu-proxy/sozu/blob/master/lib/src/protocol/http/parser.rs)
+- [HTTP proxy](https://github.com/sozu-proxy/sozu/blob/main/lib/src/protocol/http/parser/mod.rs)
 - [Using nom with generators](https://github.com/Geal/generator_nom)
 
 ## Parser combinators
@@ -230,7 +230,7 @@ Here is a (non exhaustive) list of known projects using nom:
 [CSV](https://github.com/GuillaumeGomez/csv-parser),
 [FASTA](https://github.com/TianyiShi2001/nom-fasta),
 [FASTQ](https://github.com/elij/fastq.rs),
-[INI](https://github.com/Geal/nom/blob/master/tests/ini.rs),
+[INI](https://github.com/Geal/nom/blob/main/tests/ini.rs),
 [ISO 8601 dates](https://github.com/badboy/iso8601),
 [libconfig-like configuration file format](https://github.com/filipegoncalves/rust-config),
 [Web archive](https://github.com/sbeckeriv/warc_nom_parser),
@@ -268,7 +268,7 @@ Here is a (non exhaustive) list of known projects using nom:
 [Bencode](https://github.com/jbaum98/bencode.rs),
 [D-Bus](https://github.com/toshokan/misato),
 [DHCP](https://github.com/rusticata/dhcp-parser),
-[HTTP](https://github.com/sozu-proxy/sozu/tree/master/lib/src/protocol/http),
+[HTTP](https://github.com/sozu-proxy/sozu/tree/main/lib/src/protocol/http),
 [URI](https://github.com/santifa/rrp/blob/master/src/uri.rs),
 [IMAP](https://github.com/djc/tokio-imap),
 [IRC](https://github.com/Detegr/RBot-parser),
