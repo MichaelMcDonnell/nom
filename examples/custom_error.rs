@@ -4,23 +4,65 @@ use nom::bytes::complete::tag;
 use nom::error::ErrorKind;
 use nom::error::ParseError;
 use nom::sequence::tuple;
-use nom::Err::Error;
 use nom::Finish;
 use nom::IResult;
 
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum Context {
+  Foo,
+  Bar,
+  Nom,
+}
+
 #[derive(Debug, PartialEq)]
-pub enum CustomError<I> {
-  MyError,
-  Nom(I, ErrorKind),
+pub struct CustomError<I> {
+  context: Context,
+  input: I,
+  kind: ErrorKind,
 }
 
 impl<I> ParseError<I> for CustomError<I> {
   fn from_error_kind(input: I, kind: ErrorKind) -> Self {
-    CustomError::Nom(input, kind)
+    CustomError {
+      context: Context::Nom,
+      input,
+      kind,
+    }
   }
 
   fn append(_: I, _: ErrorKind, other: Self) -> Self {
     other
+  }
+}
+
+pub trait CustomContext<I>: Sized {
+  fn context(_input: I, _context: Context, other: Self) -> Self {
+    other
+  }
+}
+
+impl<I> CustomContext<I> for CustomError<I> {
+  fn context(input: I, context: Context, other: Self) -> Self {
+    Self {
+      context,
+      input: input,
+      kind: other.kind,
+    }
+  }
+}
+
+pub fn context<I: Clone, E: CustomContext<I>, F, O>(
+  context: Context,
+  mut f: F,
+) -> impl FnMut(I) -> IResult<I, O, E>
+where
+  F: nom::Parser<I, O, E>,
+{
+  move |i: I| match f.parse(i.clone()) {
+    Ok(o) => Ok(o),
+    Err(nom::Err::Incomplete(i)) => Err(nom::Err::Incomplete(i)),
+    Err(nom::Err::Error(e)) => Err(nom::Err::Error(E::context(i, context, e))),
+    Err(nom::Err::Failure(e)) => Err(nom::Err::Failure(E::context(i, context, e))),
   }
 }
 
@@ -30,15 +72,8 @@ fn foo(input: &str) -> IResult<&str, &str, CustomError<&str>> {
 }
 
 fn bar(input: &str) -> IResult<&str, &str, CustomError<&str>> {
-  /*
-  let (i, o) = tag::<_, _, CustomError<_>>("bar")(input)
-    .map_err(|_e| nom::Err::Error(CustomError::MyError))?;
+  let (i, o) = context(Context::Bar, tag("bar"))(input)?;
   Ok((i, o))
-  */
-  match tag::<_, _, CustomError<_>>("bar")(input) {
-    Ok((i, o)) => Ok((i, o)),
-    _ => Err(Error(CustomError::MyError)),
-  }
 }
 
 #[derive(Debug)]
@@ -57,10 +92,14 @@ fn main() {
       "Input is '{}' and output is ({}, {})",
       i, foo_bar.0, foo_bar.1
     ),
-    Err(CustomError::MyError) => println!("Got MyError"),
-    Err(CustomError::Nom(s, error_kind)) => {
-      println!("Got Nom error: '{}', '{:?}'", s, error_kind)
-    }
+    Err(CustomError {
+      context,
+      input,
+      kind,
+    }) => println!(
+      "Got {:?} with input {:?} and nom kind {:?}",
+      context, input, kind
+    ),
   };
 }
 
